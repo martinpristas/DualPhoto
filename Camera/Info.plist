@@ -20,6 +20,12 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>asd</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>aaawawdawdaw</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>aaaa</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -30,8 +36,6 @@
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
@@ -41,11 +45,5 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>asd</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>aaaa</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>aaawawdawdaw</string>
 </dict>
 </plist>
