@@ -16,6 +16,7 @@ class ViewController: UIViewController {
     private var captureMetadataOutput : AVCapturePhotoOutput!
     
     @IBOutlet weak var cameraView: UIView!
+    @IBOutlet weak var closeButton: UIButton!
     
     var disparityImageLeft : UIImage?
     var disparityImageRight : UIImage?
@@ -28,6 +29,11 @@ class ViewController: UIViewController {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        
+        CIFilter.registerName("DisparityComputeFilter",
+                              constructor: FilterVendor(),
+                              classAttributes: [kCIAttributeFilterName: "DisparityComputeFilter"])
+        
         let captureDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)
         
         //captureDevice?.dualCameraSwitchOverVideoZoomFactor
@@ -122,9 +128,17 @@ class ViewController: UIViewController {
         captureMetadataOutput.capturePhoto(with: photoSettings, delegate: self)
     }
     
+    @IBAction func dismissButtonAction(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
 }
 
-extension ViewController : AVCapturePhotoCaptureDelegate, UIImagePickerControllerDelegate {
+extension ViewController : AVCapturePhotoCaptureDelegate, UIImagePickerControllerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate {
+    
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        
+    }
+    
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         
         guard let imageData = photo.fileDataRepresentation(), let capturedImage = UIImage.init(data: imageData , scale: 1.0) else {
@@ -181,11 +195,45 @@ extension ViewController : AVCapturePhotoCaptureDelegate, UIImagePickerControlle
         
         
         if let left = disparityImageLeft, let right = disparityImageRight {
-            if let image = DisparitiesAlgorithm.computeDisparity_SAD(left: left, right: right) {
-                UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            disparityImageLeft = nil
+            disparityImageRight = nil
+            
+            
+            let nextVC = storyboard?.instantiateViewController(withIdentifier: "PreviewVC") as! PreviewVC
+            nextVC.loadView()
+            nextVC.leftImageView.image = left
+            nextVC.rightImageView.image = right
+            nextVC.trueDisparityImageView.image = nil
+            present(nextVC, animated: true, completion: nil)
+            
+            //let outputImage = CIImage(image: left)?.applyingFilter("DisparityComputeFilter", parameters: ["inputImage" : left.ciImage, "inputImageRight" : right.ciImage])
+            /*
+             
+            if let out = outputImage {
+                //UIImageWriteToSavedPhotosAlbum(convert(cmage: out), nil, nil, nil)
+                let nextVC = storyboard?.instantiateViewController(withIdentifier: "DisparityViewerVC") as! DisparityViewerVC
+                nextVC.loadView()
+                nextVC.disparityImageView.image = convert(cmage: out)
+                present(nextVC, animated: true, completion: nil)
+                
+                
             }
+ */
+            //disparityImageView.image = convert(cmage: outputImage!)
+            
+            //if let image = DisparitiesAlgorithm.computeDisparity_SAD(left: left, right: right) {
+            //    UIImageWriteToSavedPhotosAlbum(image, nil, nil, nil)
+            //}
         }
         
+    }
+    
+    func convert(cmage:CIImage) -> UIImage
+    {
+        let context:CIContext = CIContext.init(options: nil)
+        let cgImage:CGImage = context.createCGImage(cmage, from: cmage.extent)!
+        let image:UIImage = UIImage.init(cgImage: cgImage)
+        return image
     }
     
     func cropImage(_ inputImage: UIImage, toRect cropRect: CGRect, viewWidth: CGFloat, viewHeight: CGFloat) -> UIImage?

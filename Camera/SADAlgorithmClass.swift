@@ -24,15 +24,11 @@ class DisparitiesAlgorithm {
     
     final class func computeDisparity_SAD( left : UIImage, right : UIImage) -> UIImage? {
         
+        let rgba_Left = RGBAImage(image: left)
+        let rgba_Right = RGBAImage(image: right)
         
-        
-        let leftMonochrome = left//.noir
-        let rightMonochrome = right//.noir
-        
-        let leftImagePixelValues = pixelValues(fromCGImage: leftMonochrome.cgImage)
-        let rightImagePixelValues = pixelValues(fromCGImage: rightMonochrome.cgImage)
-        
-        guard let _ = leftImagePixelValues, let _ = rightImagePixelValues else { return nil }
+        let leftMonochrome = gray(rgba_Left!)
+        let rightMonochrome = gray(rgba_Right!)
         
         let kernelWidth = self.matchAreaWidth / 2
         let kernelHeight = self.matchAreaHeight / 2
@@ -42,16 +38,20 @@ class DisparitiesAlgorithm {
         
         let offsetAdjust = 255 / maxDisparityPixels  // this is used to map depth map output to 0-255 range
         
-        var disparityMap = [PixelData](repeating: PixelData(), count: width * height)
+        let disparityMap = RGBAImage(width: width, height: height)
+        
         
         for y in 0..<height {
             for x in 0..<width {
+                
+           
                 var prevMatch = Int.max
                 var bestDisparity = 0
+             
                 
                 
                 for disp in 1...maxDisparityPixels {
-                    if let value = computeAreaMatch(width: width, height: height, left: leftImagePixelValues!, right: rightImagePixelValues!, xPoint: x, yPoint: y, disp: disp, kernelWidth: kernelWidth, kernelHeight: kernelHeight) {
+                    if let value = computeAreaMatch(width: width, height: height, left: leftMonochrome, right: rightMonochrome, xPoint: x, yPoint: y, disp: disp, kernelWidth: kernelWidth, kernelHeight: kernelHeight) {
                         if value < prevMatch {
                             prevMatch = value
                             bestDisparity = disp
@@ -59,21 +59,34 @@ class DisparitiesAlgorithm {
                     }
                 }
                 
-                //let pixelValue = UInt8.init(bestDisparity)
-                disparityMap[x*y + x] = PixelData.init(a: 255, r: UInt8(bestDisparity * offsetAdjust), g: UInt8(bestDisparity * offsetAdjust), b: UInt8(bestDisparity * offsetAdjust))
+                let adjusted = bestDisparity * offsetAdjust
+                var pixel = Pixel(value: 0x000000)
+                pixel.Af = 1
+                pixel.R = UInt8(adjusted)
+                pixel.G = UInt8(adjusted)
+                pixel.B = UInt8(adjusted)
+                let index = y * width + x
+                disparityMap.pixels[index] = pixel
                 
                 print("Disparity value in x - \(x) | y - \(y) | value - \(bestDisparity * offsetAdjust)")
+                
+            
+            
+                
+                //let pixelValue = UInt8.init(bestDisparity)
+                //disparityMap[x*y + x] = PixelData.init(a: 255, r: UInt8(bestDisparity * offsetAdjust), g: UInt8(bestDisparity * offsetAdjust), b: UInt8(bestDisparity * offsetAdjust))
+                
+                
             }
         }
         
         
         
         
-        
-        return imageFromBitmap(pixels: disparityMap, width: Int(left.size.width), height: Int(left.size.height))
+        return disparityMap.toUIImage()
     }
     
-    class func computeAreaMatch(width: Int, height: Int, left : [Int], right: [Int], xPoint : Int, yPoint: Int, disp : Int, kernelWidth : Int, kernelHeight : Int) -> Int? {
+    class func computeAreaMatch(width: Int, height: Int, left : RGBAImage, right: RGBAImage, xPoint : Int, yPoint: Int, disp : Int, kernelWidth : Int, kernelHeight : Int) -> Int? {
         
         let x_from = xPoint - kernelWidth < 0 ? 0 : xPoint - kernelWidth
         let x_to = xPoint + kernelWidth > width ? width : xPoint + kernelWidth
@@ -83,8 +96,6 @@ class DisparitiesAlgorithm {
         
         var matchValue : Int = 0
         
-        var index_A = 0
-        var index_B = 0
         
         for x in x_from..<x_to {
             
@@ -97,16 +108,10 @@ class DisparitiesAlgorithm {
             
             for y in y_from..<y_to {
                
-                
-                index_A = x * y + x
-                index_B = right_x * y + right_x
-                
-                
-                let diff = left[index_A] - right[index_B]
-                matchValue += diff * diff
-            
-
-                
+                if let leftPixel = left.pixel(x: x, y), let rightPixel = right.pixel(x: right_x, y) {
+                    let diff = Int(leftPixel.R) - Int(rightPixel.R)
+                    matchValue += diff * diff
+                }
             }
         }
         
@@ -214,5 +219,18 @@ class DisparitiesAlgorithm {
         }
         return UIImage(cgImage: cgimage)
  
+    }
+    
+    private class func gray(_ image: RGBAImage) -> RGBAImage {
+        var outImage = image
+        outImage.process { (pixel) -> Pixel in
+            var pixel = pixel
+            let result = (pixel.Rf + pixel.Gf + pixel.Bf) / 3.0
+            pixel.Rf = result
+            pixel.Gf = result
+            pixel.Bf = result
+            return pixel
+        }
+        return outImage
     }
 }

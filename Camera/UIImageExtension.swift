@@ -20,4 +20,8 @@ extension UIImage {
         
         return processedImage
     }
+    
+    var ciImage : CIImage {
+        return CIImage.init(image: self)!
+    }
 }
