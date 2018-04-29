@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		370B1547207B503400914F26 /* RGBAImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370B1546207B503300914F26 /* RGBAImage.swift */; };
+		372203F8209328FF0097F459 /* DisparityComputeFilterRL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372203F7209328FF0097F459 /* DisparityComputeFilterRL.swift */; };
+		372203FB209333840097F459 /* OcclusionFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372203FA209333840097F459 /* OcclusionFilter.swift */; };
 		376762C8208A38590026E1FA /* FilterVendor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376762C7208A38590026E1FA /* FilterVendor.swift */; };
 		376762CA208A38B50026E1FA /* FilteringVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376762C9208A38B50026E1FA /* FilteringVC.swift */; };
 		377D5218208A4EE300AB7ACD /* right.png in Resources */ = {isa = PBXBuildFile; fileRef = 377D5216208A4EE300AB7ACD /* right.png */; };
@@ -23,12 +25,14 @@
 		37D53A9620469E7E009C5DF1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 37D53A9520469E7E009C5DF1 /* Assets.xcassets */; };
 		37D53A9920469E7E009C5DF1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 37D53A9720469E7E009C5DF1 /* LaunchScreen.storyboard */; };
 		37E84D33207A3FC7005C5E04 /* SADAlgorithmClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E84D32207A3FC7005C5E04 /* SADAlgorithmClass.swift */; };
-		37F9DC632089111D001B09E7 /* DisparityComputeFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F9DC622089111D001B09E7 /* DisparityComputeFilter.swift */; };
+		37F9DC632089111D001B09E7 /* DisparityComputeFilterLR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37F9DC622089111D001B09E7 /* DisparityComputeFilterLR.swift */; };
 		37F9DC65208A15A2001B09E7 /* DisparityFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 37F9DC64208A15A2001B09E7 /* DisparityFilter.metal */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		370B1546207B503300914F26 /* RGBAImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RGBAImage.swift; sourceTree = "<group>"; };
+		372203F7209328FF0097F459 /* DisparityComputeFilterRL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisparityComputeFilterRL.swift; sourceTree = "<group>"; };
+		372203FA209333840097F459 /* OcclusionFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OcclusionFilter.swift; sourceTree = "<group>"; };
 		376762C7208A38590026E1FA /* FilterVendor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterVendor.swift; sourceTree = "<group>"; };
 		376762C9208A38B50026E1FA /* FilteringVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteringVC.swift; sourceTree = "<group>"; };
 		377D5216208A4EE300AB7ACD /* right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = right.png; sourceTree = "<group>"; };
@@ -46,7 +50,7 @@
 		37D53A9820469E7E009C5DF1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		37D53A9A20469E7E009C5DF1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37E84D32207A3FC7005C5E04 /* SADAlgorithmClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SADAlgorithmClass.swift; sourceTree = "<group>"; };
-		37F9DC622089111D001B09E7 /* DisparityComputeFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisparityComputeFilter.swift; sourceTree = "<group>"; };
+		37F9DC622089111D001B09E7 /* DisparityComputeFilterLR.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DisparityComputeFilterLR.swift; sourceTree = "<group>"; };
 		37F9DC64208A15A2001B09E7 /* DisparityFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DisparityFilter.metal; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,6 +65,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		372203F9209333570097F459 /* Filters */ = {
+			isa = PBXGroup;
+			children = (
+				376762C7208A38590026E1FA /* FilterVendor.swift */,
+				37F9DC622089111D001B09E7 /* DisparityComputeFilterLR.swift */,
+				372203F7209328FF0097F459 /* DisparityComputeFilterRL.swift */,
+				372203FA209333840097F459 /* OcclusionFilter.swift */,
+			);
+			path = Filters;
+			sourceTree = "<group>";
+		};
 		37D53A8220469E7E009C5DF1 = {
 			isa = PBXGroup;
 			children = (
@@ -89,8 +104,7 @@
 				37D30150207A2AE30010C6D3 /* UIImageExtension.swift */,
 				37E84D32207A3FC7005C5E04 /* SADAlgorithmClass.swift */,
 				370B1546207B503300914F26 /* RGBAImage.swift */,
-				37F9DC622089111D001B09E7 /* DisparityComputeFilter.swift */,
-				376762C7208A38590026E1FA /* FilterVendor.swift */,
+				372203F9209333570097F459 /* Filters */,
 				376762C9208A38B50026E1FA /* FilteringVC.swift */,
 				37F9DC64208A15A2001B09E7 /* DisparityFilter.metal */,
 				377D5217208A4EE300AB7ACD /* left.png */,
@@ -184,10 +198,12 @@
 				37D53A8F20469E7E009C5DF1 /* AppDelegate.swift in Sources */,
 				379344AB20908127006E3127 /* MainVC.swift in Sources */,
 				37F9DC65208A15A2001B09E7 /* DisparityFilter.metal in Sources */,
-				37F9DC632089111D001B09E7 /* DisparityComputeFilter.swift in Sources */,
+				372203F8209328FF0097F459 /* DisparityComputeFilterRL.swift in Sources */,
+				37F9DC632089111D001B09E7 /* DisparityComputeFilterLR.swift in Sources */,
 				377D521B208A54BD00AB7ACD /* DisparityViewerVC.swift in Sources */,
 				37D30151207A2AE30010C6D3 /* UIImageExtension.swift in Sources */,
 				37E84D33207A3FC7005C5E04 /* SADAlgorithmClass.swift in Sources */,
+				372203FB209333840097F459 /* OcclusionFilter.swift in Sources */,
 				379344AF209083D7006E3127 /* PreviewVC.swift in Sources */,
 				376762CA208A38B50026E1FA /* FilteringVC.swift in Sources */,
 			);

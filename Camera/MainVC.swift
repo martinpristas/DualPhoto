@@ -22,6 +22,19 @@ class MainVC: UIViewController {
 
         // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        CIFilter.registerName("DisparityComputeFilterLR",
+                              constructor: FilterVendor(),
+                              classAttributes: [kCIAttributeFilterName: "DisparityComputeFilterLR"])
+        
+        CIFilter.registerName("DisparityComputeFilterRL",
+                              constructor: FilterVendor(),
+                              classAttributes: [kCIAttributeFilterName: "DisparityComputeFilterRL"])
+        CIFilter.registerName("OcclusionFilter",
+                              constructor: FilterVendor(),
+                              classAttributes: [kCIAttributeFilterName: "OcclusionFilter"])
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

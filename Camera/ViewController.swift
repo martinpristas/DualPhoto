@@ -30,9 +30,9 @@ class ViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         
-        CIFilter.registerName("DisparityComputeFilter",
+        CIFilter.registerName("DisparityComputeFilterLR",
                               constructor: FilterVendor(),
-                              classAttributes: [kCIAttributeFilterName: "DisparityComputeFilter"])
+                              classAttributes: [kCIAttributeFilterName: "DisparityComputeFilterLR"])
         
         let captureDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)
         
@@ -53,7 +53,13 @@ class ViewController: UIViewController {
         captureMetadataOutput.isDualCameraDualPhotoDeliveryEnabled = true
         
         
+        let videoOutput = AVCaptureVideoDataOutput()
         
+        videoOutput.setSampleBufferDelegate(self, queue: DispatchQueue(label: "sample buffer delegate", attributes: []))
+        
+        if captureSession.canAddOutput(videoOutput) {
+            captureSession.addOutput(videoOutput)
+        }
         
         
         

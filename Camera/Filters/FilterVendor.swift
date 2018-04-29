@@ -14,8 +14,12 @@ class FilterVendor: NSObject, CIFilterConstructor
     func filter(withName name: String) -> CIFilter? {
         switch name
         {
-        case "DisparityComputeFilter":
-            return DisparityComputeFilter()
+        case "DisparityComputeFilterLR":
+            return DisparityComputeFilterLR()
+        case "DisparityComputeFilterRL":
+            return DisparityComputeFilterRL()
+        case "OcclusionFilter":
+            return OcclusionFilter()
         default:
             return nil
         }

@@ -9,7 +9,8 @@
 import UIKit
 import CoreImage
 
-class DisparityComputeFilter: CIFilter {
+// LEFT to RIGHT Filter
+class DisparityComputeFilterLR: CIFilter {
     @objc dynamic var inputImage: CIImage?
     @objc dynamic var inputImageRight: CIImage?
     @objc dynamic var kernelSize : CGFloat = 8
@@ -19,7 +20,7 @@ class DisparityComputeFilter: CIFilter {
     override var attributes: [String : Any]
     {
         return [
-            kCIAttributeFilterDisplayName: "Disparity Compute Filter",
+            kCIAttributeFilterDisplayName: "Disparity Compute Filter L-to-R",
             "inputImage": [kCIAttributeIdentity: 0,
                            kCIAttributeClass: "CIImage",
                            kCIAttributeDisplayName: "Image Left",

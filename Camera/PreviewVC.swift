@@ -24,6 +24,8 @@ class PreviewVC: UIViewController {
         rightImageView.image = nil
         disparityMapImageView.image = nil
         trueDisparityImageView.image = nil
+        
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -31,9 +33,18 @@ class PreviewVC: UIViewController {
             let ciLeftImage = leftImageView.image!.ciImage
             let ciRightImage = rightImageView.image!.ciImage
             
-            let outputImage = ciLeftImage.applyingFilter("DisparityComputeFilter", parameters: ["inputImage" : ciLeftImage, "inputImageRight" : ciRightImage, "kernelSize" : 10])
+            let image = CIImage(image:#imageLiteral(resourceName: "trueTsukuba"))
             
-            disparityMapImageView.image = convert(cmage: outputImage)
+            let outputImageLR = image!.applyingFilter("DisparityComputeFilterLR", parameters: ["inputImage" : ciLeftImage, "inputImageRight" : ciRightImage, "kernelSize" : 10])
+            
+            let outputImageRL = image!.applyingFilter("DisparityComputeFilterRL", parameters: ["inputImage" : ciLeftImage, "inputImageRight" : ciRightImage, "kernelSize" : 10])
+            
+            let outputOcclusion = image!.applyingFilter("OcclusionFilter", parameters: ["inputImage" : outputImageLR, "leftDisparity" : outputImageLR, "rightDisparity" : outputImageRL])
+            
+            let medianImage = image!.applyingFilter("CIMedianFilter", parameters: ["inputImage" : outputImageLR])
+            
+            disparityMapImageView.image = convert(cmage: outputImageLR)
+            trueDisparityImageView.image  = convert(cmage: medianImage)
         }
     }
     
